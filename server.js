@@ -14,6 +14,7 @@ const eventRoutes = require('./routes/events');
 const resultRoutes = require('./routes/results');
 const galleryRoutes = require('./routes/gallery');
 const adminRoutes = require('./routes/admin');
+const { seedAdmin } = require('./services/seedService');
 
 const app = express();
 
@@ -52,8 +53,12 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/artsfest'
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => {
+.then(async () => {
   console.log('Connected to MongoDB');
+  
+  // Auto-seed admin user
+  await seedAdmin();
+
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
